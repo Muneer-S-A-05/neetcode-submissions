@@ -1,0 +1,27 @@
+class Solution:
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        neighbors = {i:[] for i in range(n)}
+        for x,y in edges:
+            neighbors[x].append(y)
+            neighbors[y].append(x)
+
+        visit,cycle = set(),set()
+        def dfs(node,pre):
+            if node in cycle:
+                return False
+            if node in visit:
+                return True
+
+            visit.add(node)
+
+            cycle.add(node)
+            for neighbor in neighbors[node]:
+                if neighbor!=pre: #prev node and current node are in directed loop since its undirected graph
+                    if not dfs(neighbor,node): return False
+            cycle.remove(node)
+
+            return True
+
+        return dfs(0,-1) and len(visit)==n
+
+
